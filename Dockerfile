@@ -3,12 +3,14 @@ FROM node:20-alpine
 RUN apk add --no-cache curl
 
 WORKDIR /app
+ENV NODE_ENV=development
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --include=dev
 COPY tsconfig.json ./
 COPY src/ ./src/
-RUN npx tsc
+RUN ./node_modules/.bin/tsc
 
+ENV NODE_ENV=production
 ENV PORT=3110
 EXPOSE 3110
 
